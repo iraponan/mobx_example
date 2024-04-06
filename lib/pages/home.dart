@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mobx_example/controllers/counter.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key, required this.title});
@@ -10,7 +12,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int _counter = 0;
+  Counter counter = Counter();
 
   @override
   Widget build(BuildContext context) {
@@ -24,24 +26,22 @@ class _HomePageState extends State<HomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Text('Você já apertou o botão várias vezes:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+            Observer(
+              builder: (context) {
+                return Text(
+                  '${counter.count}',
+                  style: Theme.of(context).textTheme.headlineMedium,
+                );
+              },
             ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
+        onPressed: counter.increment.call,
         tooltip: 'Adicionar',
         child: const Icon(Icons.add),
       ),
     );
-  }
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
   }
 }
